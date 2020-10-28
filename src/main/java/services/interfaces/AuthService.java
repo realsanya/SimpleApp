@@ -2,7 +2,7 @@ package services.interfaces;
 
 import javax.servlet.http.Cookie;
 
-public interface CookieService {
+public interface AuthService {
     void addCookie(Cookie cookie);
 
     boolean findCookie(Cookie cookie);

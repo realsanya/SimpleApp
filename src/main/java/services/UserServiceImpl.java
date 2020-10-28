@@ -5,6 +5,7 @@ import repositories.interfaces.UserRepository;
 import services.interfaces.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
@@ -19,7 +20,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Integer id) {
+    public Optional<User> getUserById(Integer id) {
         return userRepository.findById(id);
     }
 
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsersByAge(Integer age) {
-        return userRepository.findByAge(age);
+    public List<User> getUsersByAge(String age) {
+        return userRepository.findAllByAge(age);
     }
 }
