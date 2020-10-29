@@ -27,25 +27,26 @@ public class RegisterServlet extends HttpServlet {
 
         String hash = HashPassword.getHash(inputPassword);
 
-//        if (usersService.getUserByEmail(inputEmail).isPresent()) {
-//            resp.sendRedirect("/login");
-//        } else {
-        User user = User.builder()
-                .firstName(inputFirstName)
-                .lastName(inputLastName)
-                .age(inputAge)
-                .email(inputEmail)
-                .password(hash).build();
+        if (userService.getUserByEmail(inputEmail) != null) {
+            resp.sendRedirect("/login");
+        } else {
+            User user = User.builder()
+                    .firstName(inputFirstName)
+                    .lastName(inputLastName)
+                    .age(inputAge)
+                    .email(inputEmail)
+                    .password(hash).build();
 
-        System.out.println(user.getFirstName());
-        userService.addUser(user);
+            System.out.println(user.getFirstName());
+            userService.addUser(user);
 
 
-        resp.sendRedirect("/main");
-//        }
+            resp.sendRedirect("/main");
+        }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
+            ServletException, IOException {
         request.getRequestDispatcher("register.ftl").forward(request, response);
     }
 }
