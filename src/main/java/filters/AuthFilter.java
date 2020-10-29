@@ -16,24 +16,30 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        AuthService authService = (AuthService) request.getServletContext().getAttribute("authService");
-        Cookie[] cookies = request.getCookies();
-        boolean find = false;
+//        AuthService authService = (AuthService) request.getServletContext().getAttribute("authService");
+//        Cookie[] cookies = request.getCookies();
+//        boolean find = false;
 
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("cookie")) {
-                    find = authService.findCookie(cookie);
-                    break;
-                }
-            }
-        }
-
-        if (find) {
+        boolean user = request.getSession().getAttribute("user") != null;
+        if (user) {
             filterChain.doFilter(servletRequest, servletResponse);
-        } else {
-            response.sendRedirect("/login");
+            return;
         }
+        response.sendRedirect("/login");
     }
+
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                if (cookie.getName().equals("cookie")) {
+//                    find = authService.findCookie(cookie);
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if (find) {
+//            filterChain.doFilter(servletRequest, servletResponse);
+//        } else {
+//            response.sendRedirect("/login");
+//        }
 }

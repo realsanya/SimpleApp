@@ -1,6 +1,7 @@
 package servlets;
 
 import models.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import services.interfaces.UserService;
 import utils.HashPassword;
 
@@ -18,14 +19,15 @@ public class RegisterServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         UserService userService = (UserService) req.getServletContext().getAttribute("userService");
-        System.out.println(userService);
+        PasswordEncoder passwordEncoder = (PasswordEncoder) req.getServletContext().getAttribute("passwordEncoder");
+
         String inputFirstName = req.getParameter("inputFirstName");
         String inputLastName = req.getParameter("inputLastName");
         String inputAge = req.getParameter("inputAge");
         String inputEmail = req.getParameter("inputEmail");
         String inputPassword = req.getParameter("inputPassword");
 
-        String hash = HashPassword.getHash(inputPassword);
+        String hash = passwordEncoder.encode(inputPassword);
 
         if (userService.getUserByEmail(inputEmail) != null) {
             resp.sendRedirect("/login");
@@ -39,8 +41,6 @@ public class RegisterServlet extends HttpServlet {
 
             System.out.println(user.getFirstName());
             userService.addUser(user);
-
-
             resp.sendRedirect("/main");
         }
     }

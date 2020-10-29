@@ -79,6 +79,14 @@
             <version>3.4.5</version>
         </dependency>
 
+        <!-- spring-security-core -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.4.1</version>
+        </dependency>
+
+
 
     </dependencies>
 

@@ -13,8 +13,6 @@ import java.io.IOException;
 public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = (User) request.getSession().getAttribute("user");
-        System.out.println(user);
         request.getRequestDispatcher("/profile.ftl").forward(request, response);
     }
 

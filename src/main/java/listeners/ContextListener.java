@@ -2,6 +2,8 @@ package listeners;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import repositories.AuthRepositoryJdbcTemplateImpl;
 import repositories.UserRepositoryJdbcTemplateImpl;
 import repositories.interfaces.AuthRepository;
@@ -45,5 +47,8 @@ public class ContextListener implements ServletContextListener {
         AuthRepository authRepository = new AuthRepositoryJdbcTemplateImpl(dataSource);
         AuthService authService = new AuthServiceImpl(authRepository);
         servletContextEvent.getServletContext().setAttribute("authService", authService);
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        servletContextEvent.getServletContext().setAttribute("passwordEncoder", passwordEncoder);
     }
 }
