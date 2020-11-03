@@ -1,10 +1,13 @@
 package servlets;
 
 import models.User;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import services.interfaces.UserService;
 import utils.HashPassword;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,11 +17,20 @@ import java.io.IOException;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
+
+    UserService userService;
+
+    @Override
+    public void init(ServletConfig config) {
+        ServletContext servletContext = config.getServletContext();
+        ApplicationContext applicationContext = (ApplicationContext) servletContext.getAttribute("applicationContext");
+        userService = applicationContext.getBean(UserService.class);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
 
-        UserService userService = (UserService) req.getServletContext().getAttribute("userService");
         PasswordEncoder passwordEncoder = (PasswordEncoder) req.getServletContext().getAttribute("passwordEncoder");
 
         String inputFirstName = req.getParameter("inputFirstName");

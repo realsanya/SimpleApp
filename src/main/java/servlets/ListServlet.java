@@ -1,8 +1,11 @@
 package servlets;
 
 import models.User;
+import org.springframework.context.ApplicationContext;
 import services.interfaces.UserService;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,9 +16,18 @@ import java.util.List;
 
 @WebServlet("/list")
 public class ListServlet extends HttpServlet {
+
+    UserService userService;
+
+    @Override
+    public void init(ServletConfig config) {
+        ServletContext servletContext = config.getServletContext();
+        ApplicationContext applicationContext = (ApplicationContext) servletContext.getAttribute("applicationContext");
+        userService = applicationContext.getBean(UserService.class);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserService userService = (UserService) request.getServletContext().getAttribute("userService");
         List<User> users = userService.getAllUsers();
         System.out.println("users=" + users);
         request.setAttribute("users", users);

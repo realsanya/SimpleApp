@@ -1,54 +1,21 @@
 package listeners;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import repositories.AuthRepositoryJdbcTemplateImpl;
-import repositories.UserRepositoryJdbcTemplateImpl;
-import repositories.interfaces.AuthRepository;
-import repositories.interfaces.UserRepository;
-import services.AuthServiceImpl;
-import services.UserServiceImpl;
-import services.interfaces.AuthService;
-import services.interfaces.UserService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.io.IOException;
-import java.util.Properties;
 
 @WebListener
 public class ContextListener implements ServletContextListener {
 
+    @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        Properties properties = new Properties();
-        try {
-            properties.load(servletContextEvent.getServletContext().getResourceAsStream("/WEB-INF/properties/db.properties"));
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(properties.getProperty("db.url"));
-        hikariConfig.setDriverClassName(properties.getProperty("db.driver"));
-        hikariConfig.setUsername(properties.getProperty("db.username"));
-        hikariConfig.setPassword(properties.getProperty("db.password"));
-        hikariConfig.setMaximumPoolSize(10);
-
-        HikariDataSource dataSource = new HikariDataSource(hikariConfig);
-        servletContextEvent.getServletContext().setAttribute("datasource", dataSource);
-
-        UserRepository userRepository = new UserRepositoryJdbcTemplateImpl(dataSource);
-        UserService userService = new UserServiceImpl(userRepository);
-        servletContextEvent.getServletContext().setAttribute("userService", userService);
-
-        AuthRepository authRepository = new AuthRepositoryJdbcTemplateImpl(dataSource);
-        AuthService authService = new AuthServiceImpl(authRepository);
-        servletContextEvent.getServletContext().setAttribute("authService", authService);
-
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        servletContextEvent.getServletContext().setAttribute("passwordEncoder", passwordEncoder);
+        ServletContext servletContext = servletContextEvent.getServletContext();
+        ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+        servletContext.setAttribute("applicationContext", context);
     }
 }
