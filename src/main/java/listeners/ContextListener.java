@@ -1,6 +1,8 @@
 package listeners;
 
+import config.ApplicationConfig;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
@@ -15,7 +17,7 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         ServletContext servletContext = servletContextEvent.getServletContext();
-        ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
         servletContext.setAttribute("applicationContext", context);
     }
 }
